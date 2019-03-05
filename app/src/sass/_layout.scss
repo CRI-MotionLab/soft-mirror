@@ -1,0 +1,227 @@
+$lightYellow: #fff17a;
+$lightBlue: #7cdde2;
+$lightRed: #f45a54;
+
+$darkBlue: #4951D0;
+$darkerBlue: #2f36a7;
+
+$lightGrey: #eee;
+$darkGrey: #aaa;
+$darkerGrey: #333;
+
+$mediaPath: '../assets/';
+$movuinoIconPath: $mediaPath + 'movuino.png';
+$gearIconPath: $mediaPath + 'gearicon.png';
+$blueRingPath: $mediaPath + 'bluering.png';
+
+html, body {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-family: Helvetica;
+  background: $darkBlue;
+  color: #eee;
+  width: 100%;
+  min-height: 100%;
+}
+
+div#main, div#app {
+  position: absolute;
+  overflow-x: hidden;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 0;
+  margin: 0;
+}
+
+div#app {
+  display: table;
+  width: 100%;
+  height: 100%;
+}
+
+#tabs {
+  position: relative;
+  background: $darkerBlue;
+  text-align: left;
+  padding: 10px;
+  padding-left: 0px;
+  margin: 0;
+  height: auto;
+}
+
+.tab {
+  color: #eee;
+  position: relative;
+  background: $darkerBlue;
+  padding: 10px 10px;
+  margin: 0;
+  text-decoration: none;
+
+  &:link, &:visited, &:hover {
+    // color: #eee;
+  }
+
+  // solution from here
+  // https://stackoverflow.com/questions/46083220/how-to-vuejs-router-link-active-style
+
+  &:active, &.router-link-active {
+    background: $darkerGrey;
+  }
+
+  &#settings-tab {
+    vertical-align: center;
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin: 0;
+    padding: 0;
+
+    #settings-icon {
+      margin: 0;
+      padding: 0;
+      margin-right: 3px;
+      margin-top: 4px;
+      margin-left: 5px;
+      width: 30px;
+      height: 30px;
+      content: url($gearIconPath);
+    }
+  }
+}
+
+////////// make the canvas fill a div with padding :
+
+div#control-container {
+  display: table-row;
+  position: relative;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+}
+
+div#play-btn-wrapper-wrapper {
+  position: relative;
+  display: table-cell;
+  height: 100%;
+  vertical-align: middle;
+}
+
+div#play-btn-wrapper {
+  display: inline-block;
+  width: 100%;
+}
+
+////////// settings :
+
+div#settings-container {
+  padding: 10px;
+
+  div#settings-wrapper {
+    margin-left: 20%;
+    width: 60%;
+  }
+}
+
+div.ip-container {
+  display: inline;
+  max-width: 60% !important;
+}
+
+input[type=number], input[type=text] {
+  margin: 5px 0px;
+  padding: 3%;
+  max-width: 100%;
+  background-color: #fff;
+
+  &.invalid {
+    background-color: #f00;
+  }
+
+  &.ip {
+    display: inline;
+    max-width: 12% !important;
+  }
+}
+
+////////// lightbox :
+
+div#lightbox {
+  z-index: 100;
+  display: none; //block;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  bottom: 0;
+  position: fixed;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  text-align: center;
+  color: $lightGrey;
+  background-color: rgba(0, 0, 0, 0.75);
+  // cursor: default;
+  a {
+    color: #aaa;
+    font-weight: bold;
+    text-decoration: none;
+  }
+
+  div#lightbox-contents {
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin: auto;
+    // background-color: rgba(0, 0, 0, 0.5);
+    background-color: $darkBlue;
+
+    #movuino-icon {
+      display: block;
+      margin: auto;
+      padding: 0;
+      width: 75%;
+      // width: 200px;
+      // height: 200px;
+      content: url($movuinoIconPath);
+    }
+
+    div {
+      position: absolute;
+      bottom: 10%;
+
+      button {
+        border: 0;
+        // padding: 5px 15px;
+        // border-radius: 0;
+        padding: 5px 30px;
+        border-radius: 30px;
+        color:  $darkerBlue;
+        // background-color: $lightYellow;
+        font-size: 2em;
+        margin-top: 40%;
+        animation: glowing-background 1500ms infinite      }
+    }
+  }
+}
+
+div#lightbox.on {
+  display: block;
+}
+
+@keyframes glowing-background {
+  0% { background-color: #fff; }
+  50% { background-color: $lightYellow; }
+  100% { background-color: #fff; }
+}
+
+//*/
