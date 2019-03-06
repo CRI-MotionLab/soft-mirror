@@ -1,0 +1,36 @@
+#N canvas 511 100 758 537 10;
+#X msg 167 81 close;
+#X msg 167 61 devices;
+#X msg 88 101 open 2;
+#X msg 88 81 open 1;
+#X msg 88 61 open 0;
+#X msg 88 121 open 3;
+#X msg 88 141 open 4;
+#X floatatom 168 106 5 0 0 0 - - -, f 5;
+#X msg 168 126 open \$1;
+#X obj 88 229 comport 1 9600;
+#X obj 88 179 t a;
+#X text 230 61 1 : check your teensy's serial port #;
+#X text 229 106 2 : open it to enable communication;
+#X floatatom 192 179 5 0 0 0 - - -, f 5;
+#X obj 177 199 f;
+#X obj 165 178 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X obj 88 289 print;
+#X obj 202 106 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X connect 0 0 10 0;
+#X connect 1 0 10 0;
+#X connect 2 0 10 0;
+#X connect 3 0 10 0;
+#X connect 4 0 10 0;
+#X connect 5 0 10 0;
+#X connect 6 0 10 0;
+#X connect 7 0 8 0;
+#X connect 8 0 10 0;
+#X connect 9 0 16 0;
+#X connect 10 0 9 0;
+#X connect 13 0 14 1;
+#X connect 14 0 9 0;
+#X connect 15 0 14 0;
+#X connect 17 0 7 0;
