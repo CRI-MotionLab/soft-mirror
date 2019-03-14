@@ -15,6 +15,7 @@
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
+    <icon src="www/assets/greenwing_gradient_nocircle_512px.png" />
     <platform name="android">
         <allow-intent href="market:*" />
         <resource-file src="www/assets/gearicon.png" target="assets/gearicon.png" />
