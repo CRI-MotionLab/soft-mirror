@@ -25,17 +25,7 @@ void loop() {
   }
   //*/
 
-  /*
-  for (int i = 0; i < nCoilPins - 2; i++) {
-    // int i = 1;
-    digitalWrite(coilPins[i], HIGH);
-    delay(500);
-    digitalWrite(coilPins[i], LOW);
-    delay(250);
-  }
-  //*/
-
-  // smooth movement :
+  // smooth movement (yay, working ! and coils are singing !):
 
   analogWrite(pwmPin, pwmValue);
   
