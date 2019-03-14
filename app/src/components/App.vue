@@ -15,6 +15,7 @@
 
 <script>
 import router from '../js/router';
+import Orientation from '../js/Orientation';
 
 export default {
   router,
@@ -55,9 +56,25 @@ export default {
       //   });
       // }, 50);
 
-      this.startListeningDeviceMotion();
-      this.startListeningDeviceOrientation();
-      this.startSendingOSC();
+      //*
+      this.$store.watch(this.$store.getters.playing, (val, oldVal) => {
+        if (val !== oldVal) {
+          if (val) {
+            this.startListeningDeviceMotion();
+            this.startListeningDeviceOrientation();
+            this.startSendingOSC();
+          } else {
+            this.stopSendingOSC();
+            this.stopListeningDeviceMotion();
+            this.stopListeningDeviceOrientation();
+          }
+        }
+      });
+      //*/
+
+      // this.startListeningDeviceMotion();
+      // this.startListeningDeviceOrientation();
+      // this.startSendingOSC();
       // this.startListeningOSC(this.$store.state.oscConfig.inputPort); // really needed ?
     },
     startListeningDeviceMotion() {

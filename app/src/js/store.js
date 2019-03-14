@@ -30,7 +30,7 @@ const errorHandler = (filename, e) => {
   console.log('Error (' + filename + '): ' + msg);
 };
 
-const settingsFilename = 'streamo-settings.json';
+const settingsFilename = 'softmirror-settings.json';
 
 const store = new Vuex.Store({
   state: {
@@ -38,7 +38,7 @@ const store = new Vuex.Store({
       inputPort: 7401,
       outputPort: 7400,
       hostIP: '192.168.0.12',
-      deviceIdentifier: 'streamo',
+      deviceIdentifier: 'softmirror',
     },
     motionValues: {
       x: 0,
@@ -53,6 +53,7 @@ const store = new Vuex.Store({
       beta: 0,
       gamma: 0,
     },
+    playing: false,
   },
   // see https://stackoverflow.com/questions/44309627/vue-jsvuex-how-to-dispatch-from-a-mutation
   // (actually it is more "how to mutate from a dispatch" which is achieved here)
@@ -65,6 +66,9 @@ const store = new Vuex.Store({
     },
     updateOrientationValues(state, values) {
       state.orientationValues = Object.assign({}, values);
+    },
+    updatePlaying(state, value) {
+      state.playing = value;
     },
   },
   actions: {
@@ -137,6 +141,7 @@ const store = new Vuex.Store({
   // see https://codepen.io/CodinCat/pen/PpNvYr
   // (allows to watch variables from App.vue)
   getters: {
+    playing: state => () => state.playing,
     inputPort: state => () => state.oscConfig.inputPort,
     motionValues: state => () => state.motionValues,
     orientationValues: state => () => state.orientationValues,

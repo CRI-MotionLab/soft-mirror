@@ -4,7 +4,7 @@
     <div id="play-btn-wrapper">
       <div
         id="play-btn"
-        :class="playing ? 'button play' : 'button stop'"
+        :class="playing ? 'button stop' : 'button play'"
         v-on:click="onPlayStopClicked">
       </div>
     </div>    
@@ -14,14 +14,17 @@
 
 <script>
   export default {
-    data() {
-      return {
-        playing: true,
-      };
+    computed: {
+      playing: {
+        get() { return this.$store.state.playing; },
+        set(value) { this.$store.commit('updatePlaying', value); },
+      }
     },
     methods: {
       onPlayStopClicked() {
-        this.playing = !this.playing;
+        // this.playing = !this.playing;
+        // this.validatedPlaying = !this.validatedPlaying;
+        this.$store.commit('updatePlaying', !this.playing);
       },
     },
   };
