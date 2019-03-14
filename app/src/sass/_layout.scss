@@ -1,28 +1,38 @@
-$lightYellow: #fff17a;
-$lightBlue: #7cdde2;
-$lightRed: #f45a54;
+// from https://www.canva.com/learn/100-color-combinations/
 
-$darkBlue: #4951D0;
-$darkerBlue: #2f36a7;
+// watery blue-greens
+$blueBlack: #021c1e;
+$cadetBlue: #004445;
+$rain: #2c7873;
+$greenery: #6fb98f;
 
-$lightGrey: #eee;
-$darkGrey: #aaa;
-$darkerGrey: #333;
+// $lightYellow: #fff17a;
+// $lightBlue: #7cdde2;
+// $lightRed: #f45a54;
+
+// $darkBlue: #4951D0;
+// $darkerBlue: #2f36a7;
+
+// $lightGrey: #eee;
+// $darkGrey: #aaa;
+// $darkerGrey: #333;
 
 $mediaPath: '../assets/';
-$movuinoIconPath: $mediaPath + 'movuino.png';
 $gearIconPath: $mediaPath + 'gearicon.png';
-$blueRingPath: $mediaPath + 'bluering.png';
 
 html, body {
   height: 100%;
   padding: 0;
   margin: 0;
+  // disable all highlighting when tapping any element
+  cursor: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
   font-family: Helvetica;
-  background: $darkBlue;
+  background: $rain;
   color: #eee;
   width: 100%;
   min-height: 100%;
@@ -47,7 +57,7 @@ div#app {
 
 #tabs {
   position: relative;
-  background: $darkerBlue;
+  background: $cadetBlue;
   text-align: left;
   padding: 10px;
   padding-left: 0px;
@@ -58,7 +68,7 @@ div#app {
 .tab {
   color: #eee;
   position: relative;
-  background: $darkerBlue;
+  background: $cadetBlue;
   padding: 10px 10px;
   margin: 0;
   text-decoration: none;
@@ -71,7 +81,7 @@ div#app {
   // https://stackoverflow.com/questions/46083220/how-to-vuejs-router-link-active-style
 
   &:active, &.router-link-active {
-    background: $darkerGrey;
+    background: $blueBlack;
   }
 
   &#settings-tab {
@@ -162,7 +172,7 @@ div#lightbox {
   overflow-x: hidden;
   overflow-y: scroll;
   text-align: center;
-  color: $lightGrey;
+  // color: $lightGrey;
   background-color: rgba(0, 0, 0, 0.75);
   // cursor: default;
   a {
@@ -183,7 +193,7 @@ div#lightbox {
     text-align: center;
     margin: auto;
     // background-color: rgba(0, 0, 0, 0.5);
-    background-color: $darkBlue;
+    // background-color: $darkBlue;
 
     #movuino-icon {
       display: block;
@@ -192,7 +202,7 @@ div#lightbox {
       width: 75%;
       // width: 200px;
       // height: 200px;
-      content: url($movuinoIconPath);
+      // content: url($movuinoIconPath);
     }
 
     div {
@@ -205,7 +215,7 @@ div#lightbox {
         // border-radius: 0;
         padding: 5px 30px;
         border-radius: 30px;
-        color:  $darkerBlue;
+        // color:  $darkerBlue;
         // background-color: $lightYellow;
         font-size: 2em;
         margin-top: 40%;
@@ -220,7 +230,7 @@ div#lightbox.on {
 
 @keyframes glowing-background {
   0% { background-color: #fff; }
-  50% { background-color: $lightYellow; }
+  50% { background-color: $greenery; }
   100% { background-color: #fff; }
 }
 

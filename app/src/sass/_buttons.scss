@@ -12,7 +12,7 @@ $halfIconWidth: $iconWidth / 2;
 $halfIconHeightMinusWidth: $iconHeightMinusWidth / 2;
 
 $btnBgColor: #eee;
-$btnBgBlinkColor: #f99;
+$btnBgBlinkColor: $greenery; //#f99;
 $btnFgColor: #000;
 
 .button {
@@ -23,7 +23,6 @@ $btnFgColor: #000;
   height: $btnSize;
   background-color: $btnBgColor;
   border-radius: $btnSize;
-  cursor: pointer;
 
   &.stop {
     animation: glowing-background 1500ms infinite;
