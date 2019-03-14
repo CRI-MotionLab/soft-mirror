@@ -1,0 +1,9 @@
+#N canvas 547 83 450 300 10;
+#X obj 98 109 oscparse;
+#X obj 98 139 list trim;
+#X text 78 53 osc face tracker default port;
+#X obj 98 182 print;
+#X obj 98 80 netreceive -b -u 7400;
+#X connect 0 0 1 0;
+#X connect 1 0 3 0;
+#X connect 4 0 0 0;
