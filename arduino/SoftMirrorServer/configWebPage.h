@@ -11,14 +11,16 @@ static const char configWebPage[] PROGMEM = R"=====(
     html,body,div,p,ul,li,h1,h2,h3,h4,h5,h6{margin:0;padding:0;}
     ul{padding-left:15px;}
     body{font-family:Helvetica;color:#6fb98f;background-color:#2c7873;}
+    #page-wrapper{text-align:center;}
     #canvas-wrapper{position:relative;width:100%;height:400px;margin-bottom:20px;}
     canvas{position:absolute;background:rgb(0,0,0);margin-left:-200px;}
     #overlay{
       position:absolute;display:inline-block;margin-left:-200px;pointer-events:none;
       width:400px;height:400px;background-size:100% 100% !important;opacity:0.2;
     }
-    #page-wrapper{text-align:center;}
-    #help,#control{display:inline-block;width:400px;text-align:left;word-wrap:break-word;}
+    #help,#control{width:400px;text-align:left;word-wrap:break-word;}
+    #help-control-wrapper{width:100%;text-align:center;}
+    #help-control-wrapper>div{display:inline-block;width:400px;text-align:center;}
     #title,#control{padding:10px;}
     #clear-save{float:right;}
   </style>
@@ -30,19 +32,21 @@ static const char configWebPage[] PROGMEM = R"=====(
       <canvas id="coilMap" width="400" height="400"></canvas>
       <div id="overlay"></div>
     </div>
-    <div id="help"><ul>
-      <li> click on the background to create a new coil </li>
-      <li> click on an existing coil to select and / or drag it </li>
-      <li> type escape to unselect the selected coil </li>
-      <li> type the selected coil's integer identifier to update it </li>
-    </ul></div>
-    <div id="control">
-      <input type="file" id="fileBtn" name="file" />
-      <div id="clear-save">
-      <input type="button" id="clearBtn" value="clear" />
-      <input type="button" id="saveBtn" value="save" />
+    <div id="help-control-wrapper"><div>
+      <div id="help"><ul>
+        <li> click on the background to create a new coil </li>
+        <li> click on an existing coil to select and / or drag it </li>
+        <li> type escape to unselect the selected coil </li>
+        <li> type the selected coil's integer identifier to update it </li>
+      </ul></div>
+      <div id="control">
+        <input type="file" id="fileBtn" name="file" />
+        <div id="clear-save">
+        <input type="button" id="clearBtn" value="clear" />
+        <input type="button" id="saveBtn" value="save" />
+        </div>
       </div>
-    </div>
+    </div></div>
   </div>
   <script type="text/javascript">
   window.onload = function() {
