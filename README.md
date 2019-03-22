@@ -5,5 +5,6 @@
 This project contains several software components :
 
 * `app` is a cordova based application for smartphones and tablets, targeting android and ios platforms. It is aimed at controlling Soft Mirror systems using the OSC protocol.
-* `firmware` is currently a firmware for teensy boards, reading input from the app (currently forwarded from a local server receiving the app's OSC messages and translating them to serial packets for the teensy). The next version should be based on a wifi enabled board such as the Adafruit feather or node-mcu, to allow the mobile app to connect directly to the board via wifi.
-* `server` is a nodejs server that receives wifi OSC messages from the app and forwards them to the firmware via usb (serial).
+* `arduino` contains two arduino project for use with esp8266 based node-mcu boards :
+    * `SoftMirrorServer` which acts as a WiFi access point for all the other devices used in the project, serves a configuration web page (and persists the configuration to memory when saved), receives OSC messages from the `app`, translates these messages into pwm instructions, dispatches some of these instructions to its own pins, and forwards the others to the other connected client node-mcu boards.
+    * `SoftMirrorClient` is the firmware for the other node-mcu boards which will automatically connect to the server on boot. A specific id (from 1 to N) must be changed in the code (the `BOARD_ID` #define in `globalConfig.h`) before flashing each client board.
