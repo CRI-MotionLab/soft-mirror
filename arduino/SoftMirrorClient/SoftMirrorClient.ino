@@ -13,6 +13,7 @@
 // The WebSockets library has been modified to run in async mode
 // (commented line 89 and uncommented line 90 in WebSockets.h)
 // this means the ESPAsyncRCP library (https://github.com/me-no-dev/ESPAsyncTCP) is required
+// (tip found here : https://github.com/Links2004/arduinoWebSockets/issues/133)
 // !!!!
 
 #include "globalConfig.h"
