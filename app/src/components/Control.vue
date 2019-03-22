@@ -22,8 +22,6 @@
     },
     methods: {
       onPlayStopClicked() {
-        // this.playing = !this.playing;
-        // this.validatedPlaying = !this.validatedPlaying;
         this.$store.commit('updatePlaying', !this.playing);
       },
     },

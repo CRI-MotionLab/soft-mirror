@@ -17,6 +17,8 @@
 import router from '../js/router';
 import Orientation from '../js/Orientation';
 
+const orientation = new Orientation();
+
 export default {
   router,
   components: {},
@@ -131,18 +133,22 @@ export default {
     },
     startSendingOSC(interval = 10) { // interval between consecutive frames in ms
       this.sendOscId = setInterval(() => {
-        this.sendOSC('/softmirror', [
-          this.$store.state.oscConfig.deviceIdentifier,
-          this.$store.state.motionValues.x,
-          this.$store.state.motionValues.y,
-          this.$store.state.motionValues.z,
-          this.$store.state.motionValues.alpha,
-          this.$store.state.motionValues.beta,
-          this.$store.state.motionValues.gamma,
-          this.$store.state.orientationValues.alpha,
-          this.$store.state.orientationValues.beta,
-          this.$store.state.orientationValues.gamma,
-        ]);
+        // this.sendOSC('/softmirror', [
+        //   this.$store.state.oscConfig.deviceIdentifier,
+        //   this.$store.state.motionValues.x,
+        //   this.$store.state.motionValues.y,
+        //   this.$store.state.motionValues.z,
+        //   this.$store.state.motionValues.alpha,
+        //   this.$store.state.motionValues.beta,
+        //   this.$store.state.motionValues.gamma,
+        //   this.$store.state.orientationValues.alpha,
+        //   this.$store.state.orientationValues.beta,
+        //   this.$store.state.orientationValues.gamma,
+        // ]);
+        const centroid = this.computeCentroid();
+        centroid[0] = centroid[0] * 0.5 + 0.5;
+        centroid[1] = centroid[1] * 0.5 + 0.5;
+        this.sendOSC('/centroid', centroid);
       }, interval);
     },
     stopSendingOSC() {
@@ -167,6 +173,18 @@ export default {
           reject();
         });
       });
+    },
+    computeCentroid() {
+      const centroid = orientation.process([
+        this.$store.state.motionValues.x,
+        this.$store.state.motionValues.y,
+        this.$store.state.motionValues.z,
+        this.$store.state.motionValues.alpha,
+        this.$store.state.motionValues.beta,
+        this.$store.state.motionValues.gamma,
+      ]);
+      console.log(centroid);
+      return centroid;
     },
     sendOSC(address, args) {
       window.osc.send({

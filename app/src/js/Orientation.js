@@ -23,7 +23,7 @@ function normalize(v) {
 }
 
 class Orientation {
-  constructor(k = 0.9) {
+  constructor(k = 0.1) {
     this.init = false;
     this.lastTime = 0;
     this.interval = 0;
@@ -37,12 +37,23 @@ class Orientation {
     // same as before as a projection vector
     this.gyroEstimate = new Float32Array(3);
     // filtered vector
-    this.accEstimate = new Float32Array(3);    
+    this.accEstimate = new Float32Array(3);
+    this.prevAccEstimate = new Float32Array(3);
+
+    this.bufferIndex = 0;
+    this.maxBufferIndex = 10;
+    this.buffer = [ [], [], [] ];
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < this.maxBufferIndex; j++) {
+        this.buffer[i].push(0);
+      }
+    }
   }
 
   process(input) {
     const time = Date.now();
     const accEstimate = this.accEstimate;
+    const prevAccEstimate = this.prevAccEstimate;
     const gyroEstimate = this.gyroEstimate;
 
     /**
@@ -63,11 +74,17 @@ class Orientation {
 
     normalize(accVector);
 
-    if (!this.lastTime) {
+    //*
+    if (!this.lastTime ||
+        isNaN(accEstimate[0]) ||
+        isNaN(accEstimate[1]) ||
+        isNaN(accEstimate[2])) {
       this.lastTime = time;
       // initialize corrected orientation with normalized accelerometer data
-      for (let i = 0; i < 3; i++)
+      for (let i = 0; i < 3; i++) {
         accEstimate[i] = accVector[i];
+        prevAccEstimate[i] = accEstimate[i];
+      }
 
       return;
     } else {
@@ -119,7 +136,27 @@ class Orientation {
           accEstimate[i] = accVector[i];
         }
       }
+
+      const a = 0.3;
+      const b = 1 - a;
+
+      for (let i = 0; i < 3; i++) {
+        this.buffer[i][this.bufferIndex] = accEstimate[i];
+        this.bufferIndex = (this.bufferIndex + 1) % this.maxBufferIndex;
+
+        let sum = 0;
+        for (let j = 0; j < this.maxBufferIndex; j++) {
+          sum += this.buffer[i][j];
+        }
+        sum /= this.maxBufferIndex;
+
+        // accEstimate[i] = accEstimate[i] * a + prevAccEstimate[i] * b;
+        // prevAccEstimate[i] = accEstimate[i];
+
+        accEstimate[i] = sum;
+      }
     }
+    //*/
 
     return [
       accEstimate[0],
