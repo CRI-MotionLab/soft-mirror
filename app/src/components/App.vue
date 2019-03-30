@@ -35,7 +35,7 @@ export default {
       handler: function(val) {
         this.startListeningOSC(val);
       }
-    }
+    },
   },
   methods: {
     init() {
@@ -58,26 +58,28 @@ export default {
       //   });
       // }, 50);
 
-      //*
       this.$store.watch(this.$store.getters.playing, (val, oldVal) => {
+        const mode = this.$store.state.mode;
         if (val !== oldVal) {
           if (val) {
-            this.startListeningDeviceMotion();
-            this.startListeningDeviceOrientation();
-            this.startSendingOSC();
+            if (mode === 'centroid') {
+              this.startListeningDeviceMotion();
+              this.startListeningDeviceOrientation();
+              this.startSendingOSC();
+            } else if (mode === 'auto') {
+              this.sendOSC('/automatic', [ 1 ]);
+            }
           } else {
-            this.stopSendingOSC();
-            this.stopListeningDeviceMotion();
-            this.stopListeningDeviceOrientation();
+            if (mode === 'centroid') {
+              this.stopSendingOSC();
+              this.stopListeningDeviceMotion();
+              this.stopListeningDeviceOrientation();
+            } else if (mode === 'auto') {
+              this.sendOSC('/automatic', [ 0 ]);
+            }
           }
         }
       });
-      //*/
-
-      // this.startListeningDeviceMotion();
-      // this.startListeningDeviceOrientation();
-      // this.startSendingOSC();
-      // this.startListeningOSC(this.$store.state.oscConfig.inputPort); // really needed ?
     },
     startListeningDeviceMotion() {
       window.addEventListener('devicemotion', this.onDeviceMotion, true);
@@ -133,18 +135,6 @@ export default {
     },
     startSendingOSC(interval = 10) { // interval between consecutive frames in ms
       this.sendOscId = setInterval(() => {
-        // this.sendOSC('/softmirror', [
-        //   this.$store.state.oscConfig.deviceIdentifier,
-        //   this.$store.state.motionValues.x,
-        //   this.$store.state.motionValues.y,
-        //   this.$store.state.motionValues.z,
-        //   this.$store.state.motionValues.alpha,
-        //   this.$store.state.motionValues.beta,
-        //   this.$store.state.motionValues.gamma,
-        //   this.$store.state.orientationValues.alpha,
-        //   this.$store.state.orientationValues.beta,
-        //   this.$store.state.orientationValues.gamma,
-        // ]);
         const centroid = this.computeCentroid();
         centroid[0] = centroid[0] * 0.5 + 0.5;
         centroid[1] = centroid[1] * 0.5 + 0.5;

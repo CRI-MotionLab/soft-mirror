@@ -8,5 +8,8 @@ plugins/
 assets/gearicon*.*
 !assets/gearicon.png
 
+build.json
+softmirror.jks
+
 www/**
 !www/README.md

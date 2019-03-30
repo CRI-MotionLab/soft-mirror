@@ -15,6 +15,14 @@ $btnBgColor: #eee;
 $btnBgBlinkColor: $greenery; //#f99;
 $btnFgColor: #000;
 
+.menu-selector {
+  font-size: 1em;
+  width: $btnSize;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 500px;
+}
+
 .button {
   display: inline-block !important;
   margin: 0 !important;

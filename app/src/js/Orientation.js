@@ -85,8 +85,6 @@ class Orientation {
         accEstimate[i] = accVector[i];
         prevAccEstimate[i] = accEstimate[i];
       }
-
-      return;
     } else {
       // define if we use that or use the logical `MotionEvent.interval`
       const dt = time - this.lastTime;

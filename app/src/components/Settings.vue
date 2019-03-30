@@ -17,9 +17,6 @@
         .
         <input type="number" class="ip" v-model="ip4" :class="validHostIp">
       </div>
-
-      <div> device identifier </div>
-      <div> <input type="text" v-model="deviceIdentifier"> </div>
     </div>
   </div>
 </template>
@@ -57,10 +54,6 @@
       ip4: {
         get() { return this.$store.state.oscConfig.hostIP.split('.')[3]; },
         set(value) { this.updateHostIP(value, 3); },
-      },
-      deviceIdentifier: {
-        get() { return this.$store.state.oscConfig.deviceIdentifier },
-        set(deviceIdentifier) { this.$store.dispatch('updateOscConfig', { deviceIdentifier }); },
       },
     },
     methods: {

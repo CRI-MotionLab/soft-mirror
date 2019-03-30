@@ -35,10 +35,9 @@ const settingsFilename = 'softmirror-settings.json';
 const store = new Vuex.Store({
   state: {
     oscConfig: {
-      inputPort: 7401,
-      outputPort: 7400,
-      hostIP: '192.168.0.12',
-      deviceIdentifier: 'softmirror',
+      inputPort: 8001,
+      outputPort: 8000,
+      hostIP: '192.168.1.1',
     },
     motionValues: {
       x: 0,
@@ -53,6 +52,7 @@ const store = new Vuex.Store({
       beta: 0,
       gamma: 0,
     },
+    mode: 'centroid',
     playing: false,
   },
   // see https://stackoverflow.com/questions/44309627/vue-jsvuex-how-to-dispatch-from-a-mutation
@@ -67,11 +67,18 @@ const store = new Vuex.Store({
     updateOrientationValues(state, values) {
       state.orientationValues = Object.assign({}, values);
     },
+    updateMode(state, value) {
+      state.mode = value;
+    },
     updatePlaying(state, value) {
       state.playing = value;
     },
   },
   actions: {
+    updateMode({ commit }, mode) {
+      commit('updateMode', mode);
+      // do something
+    },
     updateOscConfig({ dispatch, commit }, config) {
       commit('updateOscConfig', config);
       dispatch('persist');
@@ -141,6 +148,7 @@ const store = new Vuex.Store({
   // see https://codepen.io/CodinCat/pen/PpNvYr
   // (allows to watch variables from App.vue)
   getters: {
+    mode: state => () => state.mode,
     playing: state => () => state.playing,
     inputPort: state => () => state.oscConfig.inputPort,
     motionValues: state => () => state.motionValues,

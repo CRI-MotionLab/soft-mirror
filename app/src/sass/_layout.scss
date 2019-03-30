@@ -38,6 +38,10 @@ body {
   min-height: 100%;
 }
 
+select {
+  outline: none;
+}
+
 div#main, div#app {
   position: absolute;
   overflow-x: hidden;
