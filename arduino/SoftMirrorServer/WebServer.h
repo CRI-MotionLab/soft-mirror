@@ -27,7 +27,7 @@ private:
 
   WiFiUDP udp;
   OSCMessage inputOSCMessage;
-  ESP8266WebServer webServer = ESP8266WebServer(80);
+  ESP8266WebServer *webServer;
   WebSocketsServer socketServer = WebSocketsServer(81);
 
   Config *config;

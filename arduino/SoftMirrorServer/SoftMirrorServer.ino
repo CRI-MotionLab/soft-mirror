@@ -12,7 +12,7 @@
 // !!!!
 // The WebSockets library has been modified to run in async mode
 // (commented line 89 and uncommented line 90 in WebSockets.h)
-// this means the ESPAsyncRCP library (https://github.com/me-no-dev/ESPAsyncTCP) is required
+// this means the ESPAsyncTCP library (https://github.com/me-no-dev/ESPAsyncTCP) is required
 // (tip found here : https://github.com/Links2004/arduinoWebSockets/issues/133)
 // !!!!
 
@@ -28,6 +28,7 @@ WebServer server;
 void setup() {
   pinMode(NODE_LED, OUTPUT);
   digitalWrite(NODE_LED, HIGH);
+  // analogWriteFreq(1000);
 
   for (int i = 0; i < PWM_OUTPUTS_PER_NODEMCU; i++) {
     pinMode(PWM_PINS_ARRAY[i], OUTPUT);

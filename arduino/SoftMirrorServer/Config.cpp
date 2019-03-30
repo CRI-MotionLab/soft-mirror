@@ -6,6 +6,9 @@ void
 Config::init(CoilMapper *m) {
   if (SPIFFS.begin()) {
     enabled = true;
+#ifdef USE_SERIAL
+  Serial.println("SPIFFS started");
+#endif /* USE_SERIAL */
   }
 
   mapper = m;
@@ -75,11 +78,19 @@ Config::setNbCoils(int n) {
 void
 Config::writeCoilMapString(char *res) {
   if (!enabled) return;
+#ifdef USE_SERIAL
+  Serial.println("SPIFFS is enabled");
+#endif /* USE_SERIAL */
+
   String tmp = "coilmap\n";
   bool fExists = SPIFFS.exists("/coilmap.txt");
   File file = SPIFFS.open("/coilmap.txt", "r");
 
   if (file && fExists) {
+#ifdef USE_SERIAL
+  Serial.println("coilmap.txt exists");
+#endif /* USE_SERIAL */
+
     strcpy(res, tmp.c_str());
     while (file.available()) {
       tmp = file.readStringUntil('\n') + "\n";
@@ -91,6 +102,10 @@ Config::writeCoilMapString(char *res) {
 void
 Config::storeCoils() {
   if (!enabled) return;
+
+  if (nbCoils == 0) {
+    SPIFFS.format();
+  }
   File file = SPIFFS.open("/coilmap.txt", "w+");
 
   // we don't use file.println() as it seems to add '\r' characters before '\n'

@@ -23,9 +23,15 @@ private:
   float centroid[2];
   float prevCentroid[2];
   float centroidSpeed;
+  //float speedBuffer[
   unsigned long lastCentroidDate;
   unsigned long lastPwmMsgDate;
 
+  int autoCoilCnt;
+
+  ControlMode mode;
+  int targetValues[MAX_NUMBER_OF_COILS];
+  
   // ramp classes
   CoilRamp *coilRamps[PWM_OUTPUTS_PER_NODEMCU];
 
@@ -33,9 +39,12 @@ private:
   WebServer *server;
 
 public:
-  CoilMapper() : nbCoils(0), nbValidDistances(0), incomingCentroid(false) {
+  CoilMapper() :
+  nbCoils(0), nbValidDistances(0), incomingCentroid(false),
+  autoCoilCnt(0),
+  mode(ControlModeGesture) {
     for (int i = 0; i < MAX_NUMBER_OF_COILS; i++) {
-      coils[i][0] = coils[i][1] = 0;
+      coils[i][0] = coils[i][1] = targetValues[i] = 0;
     }
 
     centroid[0] = centroid[1] = 0;
@@ -58,13 +67,17 @@ public:
   void setNbCoils(int n);
   void setCoil(int i, float x, float y);
   void setCentroid(float x, float y);
+  void setMode(ControlMode m);
   void update();
 
 private:
+  void updateGesture();
+  void updateAutomatic();
   void computeCentroidSpeed();
   void getClosest(float x, float y);
   float getDistance(float x1, float x2, float y1, float y2);
-  void dispatchPwmTargetValues(int pwmValue);
+  void computeGesturePwmTargetValues(int pwmValue);
+  void dispatchPwmTargetValues();
   void updateLocalPwmValues();
 };
 

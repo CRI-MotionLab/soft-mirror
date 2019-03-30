@@ -44,7 +44,25 @@ CoilMapper::setCentroid(float x, float y) {
 }
 
 void
+CoilMapper::setMode(ControlMode m) {
+  mode = m;
+}
+
+void
 CoilMapper::update() {
+  for (int i = 0; i < MAX_NUMBER_OF_COILS; i++) {
+    targetValues[i] = 0;
+  }
+
+  if (mode == ControlModeGesture) {
+    updateGesture();
+  } else {
+    updateAutomatic();
+  }
+}
+
+void
+CoilMapper::updateGesture() {
   getClosest(centroid[0], centroid[1]);
 
   unsigned long now = millis();
@@ -67,7 +85,8 @@ CoilMapper::update() {
     // eventually reshape normPwmSum value here
     // normPwmSum = pow(normPwmSum, 2);
     // normPwmSum = sqrt(normPwmSum);
-    
+
+    normPwmSum *= normPwmSum;
     pwmSum = (int) SCALE(normPwmSum, 0, 1, MIN_PWM_VALUE, MAX_PWM_VALUE);
     //*/
     
@@ -75,7 +94,8 @@ CoilMapper::update() {
   }
   
   if (now - lastPwmMsgDate > PWM_CONTROL_MSG_PERIOD) {    
-    dispatchPwmTargetValues(pwmSum);
+    computeGesturePwmTargetValues(pwmSum);
+    dispatchPwmTargetValues();
     lastPwmMsgDate = now;
   }
 
@@ -92,6 +112,31 @@ CoilMapper::update() {
   //   - if above minThresh and below maxThresh, dispatch pwm values so that their sum is
   //     velocity mapped from [minThresh, maxThresh] to [MIN_PWM_VALUE, MAX_PWM_VALUE]
   //   - if above maxThresh, dispatch pwm value so that their sum is MAX_PWM_VALUE
+}
+
+void
+CoilMapper::updateAutomatic() {
+  unsigned long now = millis();
+
+  if (now - lastPwmMsgDate > PWM_CONTROL_MSG_PERIOD) {    
+    int coilId = autoCoilCnt / 2;
+    int coilState = autoCoilCnt % 2;
+    
+    if (coilState == 0) {
+      int prevCoilId = (coilId == 0) ? (nbCoils - 1) : (coilId - 1);
+      targetValues[prevCoilId] = 0;
+      targetValues[coilId] = MAX_PWM_VALUE;
+    } else {
+      targetValues[coilId] = MIN_PWM_VALUE;
+    }
+
+    autoCoilCnt = (autoCoilCnt + 1) % (2 * nbCoils);
+    
+    dispatchPwmTargetValues();
+    lastPwmMsgDate = now;
+  }
+
+  updateLocalPwmValues();  
 }
 
 void
@@ -157,14 +202,9 @@ CoilMapper::getDistance(float x1, float y1, float x2, float y2) {
 }
 
 void
-CoilMapper::dispatchPwmTargetValues(int pwmValue) {
+CoilMapper::computeGesturePwmTargetValues(int pwmValue) {
   int i;
-  int targetValues[nbCoils];
   
-  for (i = 0; i < nbCoils; i++) {
-    targetValues[i] = 0;
-  }
-
   if (pwmValue > 0) {
     float closestDistances[nbClosest];
     float distSum = 0;
@@ -178,7 +218,12 @@ CoilMapper::dispatchPwmTargetValues(int pwmValue) {
       closestDistances[i] = closestDistances[i] / distSum;
       targetValues[closestIndexes[i]] = (int) (closestDistances[i] * pwmValue);
     }
-  }
+  }  
+}
+
+void
+CoilMapper::dispatchPwmTargetValues() {
+  int i;
 
   for (i = 0; i < PWM_OUTPUTS_PER_NODEMCU; i++) {
     coilRamps[i]->setTargetPwmValue(targetValues[i]); // set local target pwm values
@@ -191,8 +236,11 @@ CoilMapper::dispatchPwmTargetValues(int pwmValue) {
     int coilIndex = i % PWM_OUTPUTS_PER_NODEMCU;
     coilFrame[coilIndex] = targetValues[i];
 
-    if (i % PWM_OUTPUTS_PER_NODEMCU == PWM_OUTPUTS_PER_NODEMCU - 1) {
+    if (i % PWM_OUTPUTS_PER_NODEMCU == PWM_OUTPUTS_PER_NODEMCU - 1 || i == nbCoils - 1) {
       server->sendCoilFrame(i / PWM_OUTPUTS_PER_NODEMCU, &(coilFrame[0])); // set remote target pwm values
+      for (int j = 0; j < PWM_OUTPUTS_PER_NODEMCU; j++) {
+        coilFrame[j] = 0;
+      }
     }
   }
 }

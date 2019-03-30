@@ -7,6 +7,7 @@ void
 WebServer::init(Config *c, CoilMapper *m) {
   config = c;
   mapper = m;
+  webServer = new ESP8266WebServer(80);
 }
 
 void
@@ -18,15 +19,15 @@ WebServer::start() {
   WiFi.softAPConfig(ip, gateway, subnet);
 
   // if (WiFi.softAP("softmirror")) {
-  if (WiFi.softAP("softmirror", "mirrorsoft", 1, false)) {
+  if (WiFi.softAP("softmirror", "mirrorsoft", 1, false, 8)) {
     digitalWrite(NODE_LED, LOW);
     
     udp.begin(8000); // start listening to udp messages
 
-    webServer.on("/", [&]() {
-      webServer.send(200, "text/html", configWebPage);
+    webServer->on("/", [&]() {
+      webServer->send(200, "text/html", configWebPage);
     });
-    webServer.begin();
+    webServer->begin();
 
     socketServer.begin();    
     socketServer.onEvent([&](uint8_t num, WStype_t type, uint8_t *payload, size_t length) {
@@ -82,7 +83,7 @@ WebServer::update() {
   }
 
   socketServer.loop();
-  webServer.handleClient();
+  webServer->handleClient();
   mapper->update();
 }
 
@@ -96,12 +97,18 @@ WebServer::processOSCMessage() {
 #endif /* USE_SERIAL */
   
   if (strcmp(address, "/centroid") == 0 && msgLength > 1 &&
-      inputOSCMessage.getType(0) == 'f' && inputOSCMessage.getType(1) == 'f') {
+    inputOSCMessage.getType(0) == 'f' && inputOSCMessage.getType(1) == 'f') {
     float x = inputOSCMessage.getFloat(0);
     float y = inputOSCMessage.getFloat(1);
     // compute centroid velocity here ?
     // then call : mapper->setCentroid(CLIP(x, 0, 1), CLIP(y, 0, 1), velocity) ?
     mapper->setCentroid(CLIP(x, 0, 1), CLIP(y, 0, 1));
+  } else if (strcmp(address, "/automatic") == 0 && msgLength > 0) {
+    if (inputOSCMessage.getInt(0) == 1) {
+      mapper->setMode(ControlModeAutomatic);
+    } else {
+      mapper->setMode(ControlModeGesture);
+    }
   }
 }
 
@@ -125,7 +132,10 @@ WebServer::processSocketMessage(uint8_t num, uint8_t *payload, size_t length) {
   // socketMsgLength++;
 
 #ifdef USE_SERIAL
-  Serial.printf("received socket message : %s of length %i\n", socketMsg[0].c_str(), socketMsgLength);
+  Serial.printf(
+    "received socket message : %s of length %i\n",
+    socketMsg[0].c_str(), socketMsgLength
+  );
 #endif /* USE_SERIAL */
 
   if (socketMsg[0] == "getcoilmap") {
@@ -145,6 +155,9 @@ WebServer::processSocketMessage(uint8_t num, uint8_t *payload, size_t length) {
 void
 WebServer::sendCoilMap(uint8_t num) {
   config->writeCoilMapString(socketFrame);  
+#ifdef USE_SERIAL
+  Serial.printf("sending coil map:\n%s", socketFrame);
+#endif /* USE_SERIAL */
   socketServer.sendTXT(num, socketFrame);
 }
 
@@ -159,6 +172,14 @@ WebServer::storeCoilMap() {
   if (socketMsg[4] == "startmap") {
     int i = 5;
     while (socketMsg[i] != "endmap" && n < MAX_NUMBER_OF_COILS) {
+      
+#ifdef USE_SERIAL
+  Serial.printf(
+    "storing coil %i : %i %i\n",
+    socketMsg[i + 2].toInt(), socketMsg[i].toInt(), socketMsg[i + 1].toInt()
+   );
+#endif /* USE_SERIAL */
+
       config->setCoil(socketMsg[i + 2].toInt(), socketMsg[i].toInt(), socketMsg[i + 1].toInt());
       i += 3;
       n++;

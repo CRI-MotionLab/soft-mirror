@@ -16,9 +16,9 @@
 #define MAX_TOTAL_SOCKET_STRING_SIZE (MAX_TOTAL_SOCKET_MSG_LENGTH * 10)
 
 #define MAIN_PERIOD 5
-#define PWM_CONTROL_MSG_PERIOD 100 // interpolation happens between messages
+#define PWM_CONTROL_MSG_PERIOD 200 // interpolation happens between messages
 
-#define PWM_OUTPUTS_PER_NODEMCU 3
+#define PWM_OUTPUTS_PER_NODEMCU 8
 
 static const int PWM_PINS_ARRAY[] = { 5, 4, 0, 2, 14, 12, 13, 15, 3, 1 };
 

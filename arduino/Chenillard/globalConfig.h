@@ -10,7 +10,7 @@
 #define ESP_LED 2
 
 #define MAX_NUMBER_OF_COILS 64
-#define MAX_NB_CLOSEST_COILS 1
+#define MAX_NB_CLOSEST_COILS 3
 #define COILMAP_SCALE_X 1
 #define COILMAP_SCALE_Y 1
 
@@ -25,26 +25,20 @@
 #define MAX_SOCKET_COILFRAME_SIZE 
 
 #define MAX_CENTROID_MSG_PERIOD 500
-#define CENTROID_DIST_THRESH 0.2f
+#define CENTROID_DIST_THRESH 0.25f
 #define CENTROID_SPEED_LO_THRESH 0.3f
 #define CENTROID_SPEED_HI_THRESH 0.9f
-#define CENTROID_SPEED_SMOOTH_FACTOR 0.25f
-// #define CENTROID_SPEED_BUFFER
+#define CENTROID_SPEED_SMOOTH_FACTOR 0.3f
 
 #define MAIN_PERIOD 5
 #define PWM_CONTROL_MSG_PERIOD 200 // interpolation happens between messages
 
-#define MIN_PWM_VALUE 0
-#define MAX_PWM_VALUE 700
+#define MIN_PWM_VALUE 300
+#define MAX_PWM_VALUE 800
 
-#define PWM_OUTPUTS_PER_NODEMCU 8
+#define PWM_OUTPUTS_PER_NODEMCU 10
 
 static const int PWM_PINS_ARRAY[] = { 5, 4, 0, 2, 14, 12, 13, 15, 3, 1 };
-
-enum ControlMode {
-  ControlModeGesture = 0,
-  ControlModeAutomatic
-};
 
 #endif /* _SOFTMIRROR_SERVER_GLOBALCONFIG_H_ */
 
