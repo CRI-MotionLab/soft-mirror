@@ -8,3 +8,7 @@ This project contains several software components :
 * `arduino` contains two arduino project for use with esp8266 based node-mcu boards :
     * `SoftMirrorServer` which acts as a WiFi access point for all the other devices used in the project, serves a configuration web page (and persists the configuration to memory when saved), receives OSC messages from the `app`, translates these messages into pwm instructions, dispatches some of these instructions to its own pins, and forwards the others to the other connected client node-mcu boards.
     * `SoftMirrorClient` is the firmware for the other node-mcu boards which will automatically connect to the server on boot. A specific id (from 1 to N) must be changed in the code (the `BOARD_ID` #define in `globalConfig.h`) before flashing each client board.
+
+### todo's
+
+use [this board](https://www.adafruit.com/product/815) from adafruit for next version
