@@ -18,8 +18,6 @@ WebServer::start() {
   IPAddress subnet(255,255,255,0);
   WiFi.softAPConfig(ip, gateway, subnet);
 
-  // if (WiFi.softAP("softmirror")) {
-  // if (WiFi.softAP("softmirror", "s0ftm1rr0r", 1, false, 8)) {
   if (WiFi.softAP("softmirror", "s0ftm1rr0r")) {
     digitalWrite(NODE_LED, LOW);
     
@@ -36,14 +34,8 @@ WebServer::start() {
       case WStype_DISCONNECTED:
         // num is socket id
         break;
-      case WStype_CONNECTED: {
-          // IPAddress ip = socketServer.remoteIP(num);
-          // payload is url
-          // socketServer.sendTXT(num, "Connected");
-#ifdef USE_SERIAL
-          Serial.printf("new board connected : %i\n", (int) num);
-#endif /* USE_SERIAL */
-        }
+      case WStype_CONNECTED:
+        // num is socket id
         break;
       case WStype_TEXT:
         processSocketMessage(num, payload, length);
@@ -91,12 +83,12 @@ WebServer::processOSCMessage() {
   // Serial.printf("received message %s with %i arguments\n", address, msgLength);
 #endif /* USE_SERIAL */
   
-  if (strcmp(address, "/centroid") == 0 && msgLength > 1 &&
-    inputOSCMessage.getType(0) == 'f' && inputOSCMessage.getType(1) == 'f') {
+  if (strcmp(address, "/centroid") == 0 &&
+      msgLength > 1 &&
+      inputOSCMessage.getType(0) == 'f' &&
+      inputOSCMessage.getType(1) == 'f') {
     float x = inputOSCMessage.getFloat(0);
     float y = inputOSCMessage.getFloat(1);
-    // compute centroid velocity here ?
-    // then call : mapper->setCentroid(CLIP(x, 0, 1), CLIP(y, 0, 1), velocity) ?
     mapper->setCentroid(CLIP(x, 0, 1), CLIP(y, 0, 1));
   } else if (strcmp(address, "/automatic") == 0 && msgLength > 0) {
     if (inputOSCMessage.getInt(0) == 1) {
