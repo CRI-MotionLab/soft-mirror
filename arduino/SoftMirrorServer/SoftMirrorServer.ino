@@ -38,6 +38,10 @@ void setup() {
   // trick to get Serial communication back after using pins 1 and 3 as pwm outputs
   // found here :
   // https://arduino.stackexchange.com/questions/29938/how-to-i-make-the-tx-and-rx-pins-on-an-esp-8266-01-into-gpio-pins
+  // see also :
+  // https://www.esp8266.com/viewtopic.php?p=61381
+  // and the linked page in the post :
+  // https://www.esp8266.com/wiki/doku.php?id=esp8266_gpio_pin_allocations
 
   if (PWM_OUTPUTS_PER_NODEMCU < 9) { // set back RX TX mode
     pinMode(1, FUNCTION_0);
